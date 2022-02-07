@@ -1,22 +1,8 @@
 import * as PIXI from "pixi.js"
-// import * as Filters from 'pixi-filters'
 
-const load = (app: PIXI.Application) => {
-    return new Promise<void>((resolve) => {
-        app.loader
-            .add('world', 'assets/hello-world.png')
-            // .add('shader', 'assets/shader.frag')
-            .load(() => {
-            resolve();
-        });
-    });
-};
 
-const main = async () => {
-    // Actual app
-    let app = new PIXI.Application();
-
-    // Display application properly
+const app = new PIXI.Application();
+document.body.appendChild(app.view);
     document.body.style.margin = '0';
     app.renderer.view.style.position = 'absolute';
     app.renderer.view.style.display = 'block';
@@ -24,43 +10,26 @@ const main = async () => {
     // View size = windows
     app.renderer.resize(window.innerWidth, window.innerHeight);
 
-    // Load assets
-    await load(app);
-    let sprite = new PIXI.Sprite(
-        app.loader.resources.world.texture
-    );
-    sprite.x = window.innerWidth / 2 - sprite.width / 2;
-    sprite.y = window.innerHeight / 2 - sprite.height / 2;
-    app.stage.addChild(sprite);
+const graphics =  new PIXI.Graphics();
+var startX= window.innerWidth/2
+var startY =window.innerHeight/2
+var size = window.innerWidth
 
-    // Handle window resizing
-    window.addEventListener('resize', (_e) => {
-        app.renderer.resize(window.innerWidth, window.innerHeight);
-        sprite.x = window.innerWidth / 2 - sprite.width / 2;
-        sprite.y = window.innerHeight / 2 - sprite.height / 2;
-    });
 
-    document.body.appendChild(app.view);
 
-    let context = {
-        velocity: { x: 1, y: 1 },
-        sprite
-    };
+for (let i=1;i<innerWidth;i++){
+  graphics.lineStyle(2,0xC2FF50,1);
+  graphics.beginFill()
+  if (size>2){
+  let newSize = size/(i*.5);
+  graphics.drawCircle(startX,startY,newSize);
+  graphics.lineStyle(2,0xFC4ECF,1);
+  graphics.drawCircle(startX+newSize,startY,newSize);
+  graphics.lineStyle(2,0x4828C5,1);
+  graphics.drawCircle(startX-newSize,startY,newSize);
+  graphics.endFill();
+}
+}
 
-    app.ticker.add(update, context);
-};
 
-// Cannot be an arrow function. Arrow functions cannot have a 'this' parameter.
-function update(this: any, delta: number) {
-    if (this.sprite.x <= 0 || this.sprite.x >= window.innerWidth - this.sprite.width) {
-        this.velocity.x = -this.velocity.x;
-    }
-    if (this.sprite.y <= 0 || this.sprite.y >= window.innerHeight - this.sprite.height) {
-        this.velocity.y = -this.velocity.y;
-    }
-    this.sprite.x += this.velocity.x * delta;
-    this.sprite.y += this.velocity.y * delta;
-};
-
-main();
-
+  app.stage.addChild(graphics);
