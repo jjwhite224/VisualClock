@@ -28,6 +28,10 @@ var isDay=false;//Boolean for the
 
  //graphics.lineStyle(2,0xC2FF50,1);
 
+ app.ticker.maxFPS = .5;
+app.ticker.add((delta)=>{
+  
+  graphics.clear();
   for(let i = 0; i<hours;i++){
   graphics.beginFill(0xd8584e);
   graphics.drawCircle(Math.round(Math.random()*startX),Math.round(Math.random()*startY),100);
@@ -39,11 +43,9 @@ var isDay=false;//Boolean for the
   graphics.endFill();
   }
  
-  for(let i = 0; i<hours;i++){
+  for(let i = 0; i<seconds;i++){
   graphics.beginFill(0xf8c08a);
   graphics.drawCircle(Math.round(Math.random()*startX),Math.round(Math.random()*startY),25);
   graphics.endFill();
   }
- 
-
-
+ })
